@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Home from './Components/Home/Home';
+import BuscarPlato from './Components/BuscarPlato/BuscarPlato';
+import DetallePlato from './Components/DetallePlato/DetallePlato';
+import { MenuProvider } from './MenuContext'
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <MenuProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="BuscarPlato" component={BuscarPlato} />
+          <Stack.Screen name="DetallePlato" component={DetallePlato} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </MenuProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
