@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList } from 'react-native';
+import api from '../../api';
+import { useMenu } from '../../MenuContext';
+import MenuItem from '../../Components/MenuItem/MenuItem';
 
 export default function Home({ navigation }) {
   const [menu, setMenu] = useState([]);
@@ -32,6 +35,10 @@ export default function Home({ navigation }) {
             <Button 
               title="Detalle" 
               onPress={() => navigation.navigate('DetallePlato', { plato: item, menu, setMenu })} 
+            />
+            <Button
+              title="Ir al Menú"
+              onPress={() => navigation.navigate('Menu')}
             />
             <Button title="Eliminar" onPress={() => eliminarPlato(item.id)} />
           </View>

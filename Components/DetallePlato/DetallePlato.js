@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import React from 'react';
+import { View, Text, Button, Image } from 'react-native';
+import { useMenu } from '../MenuItem/MenuItem';
 import api from '../../api';
 
 export default function DetallePlato({ route, navigation }) {
-  const { plato, menu, setMenu } = route.params;
+  const { plato } = route.params;
+  const { menu, setMenu } = useMenu();
   const [detalle, setDetalle] = useState(null);
+  
 
   useEffect(() => {
     const obtenerDetalle = async () => {
@@ -19,13 +22,27 @@ export default function DetallePlato({ route, navigation }) {
   }, [plato]);
 
   const agregarOEliminarPlato = () => {
+    const esVegano = detalle?.vegan;
+    const veganos = menu.filter(p => p.vegan).length;
+    const noVeganos = menu.filter(p => !p.vegan).length;
+
     const existeEnMenu = menu.find(p => p.id === plato.id);
     if (existeEnMenu) {
-      setMenu(menu.filter(p => p.id !== plato.id)); // Eliminar si ya está en el menú
-    } else if (menu.length < 4) {
-      setMenu([...menu, plato]); // Agregar si no está y no excede el límite
+      setMenu(menu.filter(p => p.id !== plato.id));
     } else {
-      alert("El menú ya tiene 4 platos.");
+      if (menu.length >= 4) {
+        Alert.alert("Límite alcanzado", "El menú ya tiene 4 platos.");
+        return;
+      }
+      if (esVegano && veganos >= 2) {
+        Alert.alert("Límite alcanzado", "Solo puedes agregar hasta 2 platos veganos.");
+        return;
+      }
+      if (!esVegano && noVeganos >= 2) {
+        Alert.alert("Límite alcanzado", "Solo puedes agregar hasta 2 platos no veganos.");
+        return;
+      }
+      setMenu([...menu, detalle]);
     }
     navigation.goBack();
   };
@@ -39,6 +56,7 @@ export default function DetallePlato({ route, navigation }) {
       <Text>Nombre: {detalle.title}</Text>
       <Text>HealthScore: {detalle.healthScore}</Text>
       <Text>Vegano: {detalle.vegan ? "Sí" : "No"}</Text>
+      <Image source={{ uri: detalle.image }} style={{ width: 100, height: 100 }} />
       <Button
         title={menu.some(p => p.id === plato.id) ? "Eliminar del menú" : "Agregar al menú"}
         onPress={agregarOEliminarPlato}
