@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useMenu } from '../../Components/MenuItem/MenuItem';
-import { fetchPlatos } from '../../api'; // Asegúrate de tener esta función para llamar a la API
+import { fetchPlatos } from '../../api';
 
 const Menu = () => {
   const { menu, setMenu } = useMenu();
@@ -10,8 +10,8 @@ const Menu = () => {
   useEffect(() => {
     const obtenerPlatos = async () => {
       try {
-        const platos = await fetchPlatos(); // Llama a tu API para obtener los platos
-        setMenu(platos); // Establece los platos en el estado del menú
+        const platos = await fetchPlatos();
+        setMenu(platos);
       } catch (error) {
         console.error("Error al obtener los platos:", error);
       } finally {
@@ -44,7 +44,6 @@ const Menu = () => {
           </View>
         )}
       />
-      {/* Aquí puedes agregar un botón o un formulario para agregar nuevos platos */}
     </View>
   );
 };

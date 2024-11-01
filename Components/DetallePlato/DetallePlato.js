@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, Image } from 'react-native';
-import { useMenu } from '../MenuItem/MenuItem';
+import { useMenu } from '../../MenuContext';
 import api from '../../api';
 
 export default function DetallePlato({ route, navigation }) {

@@ -10,7 +10,6 @@ export default function Home({ navigation }) {
   const [promedioHealthScore, setPromedioHealthScore] = useState(0);
 
   useEffect(() => {
-    // Recalcula el precio total y el promedio de HealthScore cuando cambia el menú
     setPrecioTotal(menu.reduce((acc, plato) => acc + (plato.price || 0), 0));
     setPromedioHealthScore(
       menu.length ? menu.reduce((acc, plato) => acc + (plato.healthScore || 0), 0) / menu.length : 0

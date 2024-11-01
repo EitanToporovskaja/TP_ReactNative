@@ -13,7 +13,7 @@ export default function App() {
   return (
     <MenuProvider>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='Home'>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="BuscarPlato" component={BuscarPlato} />
           <Stack.Screen name="Menu" component={Menu} />

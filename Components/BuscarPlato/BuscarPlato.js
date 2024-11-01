@@ -4,13 +4,13 @@ import api from '../../api';
 import { useMenu } from '../../MenuContext';
 
 export default function BuscarPlato({ navigation }) {
-  const { setMenu, menu } = useMenu(); // Accede al menú desde el contexto
+  const { setMenu, menu } = useMenu();
   const [search, setSearch] = useState('');
   const [resultados, setResultados] = useState([]);
 
   const buscarPlatos = async () => {
     if (search.length > 2) {
-      const response = await api.get('', { params: { query: search } });
+      const response = await api.get('/recipes/complexSearch', { params: { query: search } });
       setResultados(response.data.results);
     }
   };
