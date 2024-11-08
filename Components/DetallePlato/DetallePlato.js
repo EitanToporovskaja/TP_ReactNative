@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useMenu } from '../../MenuContext';
-import api from '../../api';
+import api from '../../api';//donde esta linkeada la api. En el siguiente link debes logearte para poder acceder a los platos: https://spoonacular.com/food-api/docs#Search-Recipes-Complex
 
 export default function DetallePlato({ route, navigation }) {
   const { plato } = route.params;
