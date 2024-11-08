@@ -1,3 +1,5 @@
+//No se muestra esta pantalla donde se acumulan los platos agregados al menu
+
 import React from 'react';
 import { View, Text, Button, Image } from 'react-native';
 import { useMenu } from '../../MenuContext';
