@@ -10,19 +10,18 @@ export default function Home({ navigation }) {
   const [promedioHealthScore, setPromedioHealthScore] = useState(0);
 
   useEffect(() => {
-    setPrecioTotal(menu.reduce((acc, plato) => acc + (plato.price || 0), 0));//no tiene nada en precio. Hay que ver porque no le llega
+    setPrecioTotal(menu.reduce((acc, plato) => acc + (plato.price || 0), 0));
     setPromedioHealthScore(
       menu.length ? menu.reduce((acc, plato) => acc + (plato.healthScore || 0), 0) / menu.length : 0
-    ); //no tiene nada en healthscore (promedio de platos saludables). Hay que ver porque no le llega
+    );
   }, [menu]);
 
   const eliminarPlato = (id) => setMenu(menu.filter(plato => plato.id !== id));
-
+//Lo siguiente no muestra precio y el promedio de healthscore cuando agregas al menu
   return (
     <View style={styles.container}>
-      <Text style={styles.totalText}>Precio Total: ${precioTotal.toFixed(2)}</Text>
-      <Text style={styles.healthScoreText}>Promedio HealthScore: {promedioHealthScore.toFixed(2)}</Text>
-
+      <Text style={styles.totalText}>Precio Total: ${precioTotal.toFixed(2)}</Text> 
+      <Text style={styles.healthScoreText}>Promedio HealthScore: {promedioHealthScore.toFixed(2)}</Text> 
       <TouchableOpacity
         style={styles.searchButton}
         onPress={() => navigation.navigate('BuscarPlato', { setMenu, menu })}
