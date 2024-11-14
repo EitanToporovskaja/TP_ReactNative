@@ -5,7 +5,7 @@ import { useMenu } from '../../MenuContext';
 import MenuItem from '../../Components/MenuItem/MenuItem'; // Aca se acumulan los platos que agregas al menu, en teoria
 
 export default function Home({ navigation }) {
-  const [menu, setMenu] = useState([]);
+  const {menu, setMenu} = useMenu();
   const [precioTotal, setPrecioTotal] = useState(0);
   const [promedioHealthScore, setPromedioHealthScore] = useState(0);
 
@@ -28,7 +28,10 @@ export default function Home({ navigation }) {
       >
         <Text style={styles.searchButtonText}>Buscar Plato</Text>
       </TouchableOpacity>
-
+     
+     
+     
+     {
       <FlatList
         data={menu}
         keyExtractor={item => item.id.toString()}
@@ -41,14 +44,14 @@ export default function Home({ navigation }) {
             >
               <Text style={styles.detailsButtonText}>Detalle</Text>
             </TouchableOpacity>
-
+{/*no entendi el sentido de este boton????
             <TouchableOpacity 
               style={styles.menuButton}
               onPress={() => navigation.navigate('Menu')}
             >
               <Text style={styles.menuButtonText}>Ir al Menú</Text>
             </TouchableOpacity>
-
+*/ }
             <TouchableOpacity
               style={styles.removeButton}
               onPress={() => eliminarPlato(item.id)}
@@ -58,7 +61,7 @@ export default function Home({ navigation }) {
           </View>
         )}
         contentContainerStyle={styles.flatListContent}
-      />
+      />}
     </View>
   );
 }
