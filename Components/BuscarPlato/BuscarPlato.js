@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, Button, StyleSheet, TouchableOpacity, Alert ,Image } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Alert ,Image } from 'react-native';
 import api from '../../api';
 import { useMenu } from '../../MenuContext';
 
 export default function BuscarPlato({ navigation }) {
-  const { setMenu, menu } = useMenu();
+  const { setMenu, menu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
   const [search, setSearch] = useState('');
   const [resultados, setResultados] = useState([]);
+  const [detalle,setDetalle] = useState([]);
+
+  const cargarDetalle = async (item) => {
+    try {
+      const resultado = await obtenerDetalle(item);
+      if (resultado) {
+        setDetalle(resultado);
+        agregarOEliminarPlato(resultado);
+      }
+    } catch (error) {
+      console.error("Error al obtener el detalle del plato:", error);
+    }
+  };
 
   const buscarPlatos = async () => {
     if (search.length > 2) {
@@ -34,21 +47,23 @@ export default function BuscarPlato({ navigation }) {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
+                  <Text style={styles.title}>{item.title}</Text>
             <Image style={styles.image} source={{uri: item.image}}/>
-            <Text style={styles.title}>{item.title}</Text>
+      
             <TouchableOpacity 
               style={styles.button}
               onPress={() => navigation.navigate('DetallePlato', { plato: item })}>
               <Text style={styles.buttonText}>Ver Detalles</Text>
-              <TouchableOpacity
+              </TouchableOpacity>
+         {   <TouchableOpacity
         style={styles.button}
-        onPress={agregarOEliminarPlato}
+        onPress={() => cargarDetalle(item) }
       >
         <Text style={styles.buttonText}>
           {menu.some(p => p.id === item.id) ? "Eliminar del menú" : "Agregar al menú"}
         </Text>
-      </TouchableOpacity>
-            </TouchableOpacity>
+      </TouchableOpacity>}
+            
           </View>
         )}
         contentContainerStyle={styles.flatListContainer}
@@ -97,6 +112,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+    alignItems: 'center',
+    justifyContent:'center',
   },
   title: {
     fontSize: 18,
@@ -109,6 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
+    width:'100%'
   },
   buttonText: {
     color: '#fff',

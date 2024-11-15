@@ -1,71 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useMenu } from '../../MenuContext';
-import api from '../../api';//donde esta linkeada la api. En el siguiente link debes logearte para poder acceder a los platos: https://spoonacular.com/food-api/docs#Search-Recipes-Complex
 
 export default function DetallePlato({ route, navigation }) {
   const { plato } = route.params;
-  const { menu, setMenu } = useMenu();
-  const [detalle, setDetalle] = useState(null);
+  const { menu, setMenu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
+  const [detalle, setDetalle] = useState([]);
 
   useEffect(() => {
-    const obtenerDetalle = async () => {
+    const cargarDetalle = async () => {
       try {
-        const response = await api.get(`/recipes/${plato.id}/information`);
-        setDetalle(response.data);
+        const resultado = await obtenerDetalle(plato);
+        setDetalle(resultado);
       } catch (error) {
         console.error("Error al obtener el detalle del plato:", error);
       }
     };
-    obtenerDetalle();
-  }, [plato]);//Se usa hooks? Verificar
 
-  const agregarOEliminarPlato = () => {
-    const esVegano = detalle?.vegan;
-    const veganos = menu.filter(p => p.vegan).length;
-    const noVeganos = menu.filter(p => !p.vegan).length;
-  
-    const existeEnMenu = menu.find(p => p.id === plato.id);
-    if (existeEnMenu) {
-      setMenu(menu.filter(p => p.id !== plato.id));
-    } else {
-      if (menu.length >= 4) {
-        Alert.alert("Límite alcanzado", "El menú ya tiene 4 platos.");
-        return; ; // No muestra la alerta. Sale la pantalla roja que dice ´Alert´ doesn't exist. Si funciona lo de limitar la maxima cantidad de platos
-      }
-      if (esVegano && veganos >= 2) {
-        Alert.alert("Límite alcanzado", "Solo puedes agregar hasta 2 platos veganos.");
-        return;// No muestra la alerta. Sale la pantalla roja que dice ´Alert´ doesn't exist. Si funciona lo de limitar la maxima cantidad de platos
-      }
-      if (!esVegano && noVeganos >= 2) {
-        Alert.alert("Límite alcanzado", "Solo puedes agregar hasta 2 platos no veganos.");
-        return;// No muestra la alerta. Sale la pantalla roja que dice ´Alert´ doesn't exist. Si funciona lo de limitar la maxima cantidad de platos
-      }
-      
-      setMenu([...menu, detalle]);
-    }
-    navigation.goBack();
-  };
+    cargarDetalle();
+  }, [plato]);
 
   if (!detalle) {
     return <Text style={styles.loadingText}>Cargando detalles del plato...</Text>;
   }
 
+  const GestionarPlato = async () => {
+    agregarOEliminarPlato(detalle, plato);
+  };
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: detalle.image }} style={styles.image} />
-      <Text style={styles.title}>{detalle.title}</Text>
-      <Text style={styles.infoText}>HealthScore: {detalle.healthScore}</Text>
-      <Text style={styles.infoText}>Vegano: {detalle.vegan ? "Sí" : "No"}</Text>
-      <Text style={styles.infoText}>Precio: ${detalle.pricePerServing}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={agregarOEliminarPlato}
-      >
-        <Text style={styles.buttonText}>
-          {menu.some(p => p.id === plato.id) ? "Eliminar del menú" : "Agregar al menú"}
-        </Text>
-      </TouchableOpacity>
+      <ScrollView scrollContentContainerStyle={styles.scrollContent}>
+        <Image source={{ uri: detalle.image }} style={styles.image} />
+        <Text style={styles.title}>{detalle.title}</Text>
+        <Text style={styles.infoText}>HealthScore: {detalle.healthScore}</Text>
+        <Text style={styles.infoText}>Vegano: {detalle.vegan ? "Sí" : "No"}</Text>
+        <Text style={styles.infoText}>Precio: ${detalle.pricePerServing}</Text>
+        <Text style={styles.infoText}>Resumen: {detalle.summary?.replace(/<[^>]*>/g, '') || 'Sin descripción'}</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => GestionarPlato()}
+        >
+          <Text style={styles.buttonText}>
+            {menu.some(p => p.id === plato.id) ? "Eliminar del menú" : "Agregar al menú"}
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
 
       <TouchableOpacity
         style={styles.backButton}
@@ -82,6 +62,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },
+  scrollContent: {
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -99,6 +81,7 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     borderWidth: 1,
     marginBottom: 30,
+    alignSelf:'center',
   },
   title: {
     fontSize: 24,
@@ -108,9 +91,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   infoText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#555',
-    marginBottom: 5,
+    marginBottom: 10,
     textAlign: 'center',
   },
   button: {

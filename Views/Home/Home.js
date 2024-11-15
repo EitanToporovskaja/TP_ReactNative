@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import api from '../../api';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useMenu } from '../../MenuContext';
-import MenuItem from '../../Components/MenuItem/MenuItem'; // Aca se acumulan los platos que agregas al menu, en teoria
 
 export default function Home({ navigation }) {
   const {menu, setMenu} = useMenu();
@@ -17,7 +15,6 @@ export default function Home({ navigation }) {
   }, [menu]);
 
   const eliminarPlato = (id) => setMenu(menu.filter(plato => plato.id !== id));
-//Lo siguiente no muestra precio y el promedio de healthscore cuando agregas al menu
   return (
     <View style={styles.container}>
       <Text style={styles.totalText}>Precio Total: ${precioTotal.toFixed(2)}</Text> 

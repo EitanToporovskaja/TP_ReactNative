@@ -1,7 +1,7 @@
 //Solo aca estamos usando axios
 import axios from 'axios';
 
-const apiKey = 'b8fb36ba01a5416c8d83a6e42170b278';
+const apiKey = '65a856846d2d4aacb809f18fe5155fbe';
 const api = axios.create({
   baseURL: 'https://api.spoonacular.com',
   params: {
