@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import api from '../../api';
 import { useMenu } from '../../MenuContext';
 import MenuItem from '../../Components/MenuItem/MenuItem'; // Aca se acumulan los platos que agregas al menu, en teoria
@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
   const [promedioHealthScore, setPromedioHealthScore] = useState(0);
 
   useEffect(() => {
-    setPrecioTotal(menu.reduce((acc, plato) => acc + (plato.price || 0), 0));
+    setPrecioTotal(menu.reduce((acc, plato) => acc + (plato.pricePerServing || 0), 0));
     setPromedioHealthScore(
       menu.length ? menu.reduce((acc, plato) => acc + (plato.healthScore || 0), 0) / menu.length : 0
     );
@@ -37,21 +37,15 @@ export default function Home({ navigation }) {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.menuItemContainer}>
-            <Text style={styles.menuItemTitle}>{item.title}</Text>
+            <Text style={styles.menuItemTitle}>{item.title}</Text>  
+            <Image style={styles.image} source={{ uri: item.image }}/>
             <TouchableOpacity 
               style={styles.detailsButton}
               onPress={() => navigation.navigate('DetallePlato', { plato: item, menu, setMenu })} 
             >
               <Text style={styles.detailsButtonText}>Detalle</Text>
             </TouchableOpacity>
-{/*no entendi el sentido de este boton????
-            <TouchableOpacity 
-              style={styles.menuButton}
-              onPress={() => navigation.navigate('Menu')}
-            >
-              <Text style={styles.menuButtonText}>Ir al Menú</Text>
-            </TouchableOpacity>
-*/ }
+
             <TouchableOpacity
               style={styles.removeButton}
               onPress={() => eliminarPlato(item.id)}
@@ -71,6 +65,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    marginBottom: 30,
   },
   totalText: {
     fontSize: 20,
@@ -106,6 +109,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 2,
+    alignItems:'center',
+    justifyContent:'center',
   },
   menuItemTitle: {
     fontSize: 18,
@@ -119,6 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     alignItems: 'center',
+    width:'100%',
   },
   detailsButtonText: {
     color: '#fff',
@@ -142,6 +148,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
+    width:'100%',
   },
   removeButtonText: {
     color: '#fff',

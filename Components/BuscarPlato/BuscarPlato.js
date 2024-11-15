@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, Button, StyleSheet, TouchableOpacity, Alert  } from 'react-native';
+import { View, Text, TextInput, FlatList, Button, StyleSheet, TouchableOpacity, Alert ,Image } from 'react-native';
 import api from '../../api';
 import { useMenu } from '../../MenuContext';
 
@@ -34,11 +34,20 @@ export default function BuscarPlato({ navigation }) {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.card}>
+            <Image style={styles.image} source={{uri: item.image}}/>
             <Text style={styles.title}>{item.title}</Text>
             <TouchableOpacity 
               style={styles.button}
               onPress={() => navigation.navigate('DetallePlato', { plato: item })}>
               <Text style={styles.buttonText}>Ver Detalles</Text>
+              <TouchableOpacity
+        style={styles.button}
+        onPress={agregarOEliminarPlato}
+      >
+        <Text style={styles.buttonText}>
+          {menu.some(p => p.id === item.id) ? "Eliminar del menú" : "Agregar al menú"}
+        </Text>
+      </TouchableOpacity>
             </TouchableOpacity>
           </View>
         )}
@@ -53,6 +62,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
     padding: 15,
+  },  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    marginBottom: 30,
   },
   searchInput: {
     height: 50,

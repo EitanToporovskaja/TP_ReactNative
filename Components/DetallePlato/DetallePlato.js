@@ -24,7 +24,7 @@ export default function DetallePlato({ route, navigation }) {
     const esVegano = detalle?.vegan;
     const veganos = menu.filter(p => p.vegan).length;
     const noVeganos = menu.filter(p => !p.vegan).length;
-
+  
     const existeEnMenu = menu.find(p => p.id === plato.id);
     if (existeEnMenu) {
       setMenu(menu.filter(p => p.id !== plato.id));
@@ -41,6 +41,7 @@ export default function DetallePlato({ route, navigation }) {
         Alert.alert("Límite alcanzado", "Solo puedes agregar hasta 2 platos no veganos.");
         return;// No muestra la alerta. Sale la pantalla roja que dice ´Alert´ doesn't exist. Si funciona lo de limitar la maxima cantidad de platos
       }
+      
       setMenu([...menu, detalle]);
     }
     navigation.goBack();
@@ -56,7 +57,7 @@ export default function DetallePlato({ route, navigation }) {
       <Text style={styles.title}>{detalle.title}</Text>
       <Text style={styles.infoText}>HealthScore: {detalle.healthScore}</Text>
       <Text style={styles.infoText}>Vegano: {detalle.vegan ? "Sí" : "No"}</Text>
-      
+      <Text style={styles.infoText}>Precio: ${detalle.pricePerServing}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={agregarOEliminarPlato}
