@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
+    paddingVertical: 20, // Add some vertical padding to the card
   },
   title: {
     fontSize: 18,
@@ -126,7 +127,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    width:'100%'
+    width: '100%',
+    marginVertical: 10, // Add some vertical margin to the buttons
   },
   buttonText: {
     color: '#fff',

@@ -36,7 +36,7 @@ export default function DetallePlato({ route, navigation }) {
         <Text style={styles.infoText}>HealthScore: {detalle.healthScore}</Text>
         <Text style={styles.infoText}>Vegano: {detalle.vegan ? "Sí" : "No"}</Text>
         <Text style={styles.infoText}>Precio: ${detalle.pricePerServing}</Text>
-        <Text style={styles.infoText}>Resumen: {detalle.summary?.replace(/<[^>]*>/g, '') || 'Sin descripción'}</Text>
+        <Text style={styles.resumen}>Resumen: {detalle.summary?.replace(/<[^>]*>/g, '') || 'Sin descripción'}</Text>
         <TouchableOpacity
           style={styles.button}
           onPress={() => GestionarPlato()}
@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },resumen:{
+fontSize:18,
   },
   scrollContent: {
     alignItems: 'center',
