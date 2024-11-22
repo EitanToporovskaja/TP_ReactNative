@@ -38,7 +38,7 @@ export default function Home({ navigation }) {
             <Image style={styles.image} source={{ uri: item.image }}/>
             <TouchableOpacity 
               style={styles.detailsButton}
-              onPress={() => navigation.navigate('DetallePlato', { plato: item, menu, setMenu })} 
+              onPress={() => navigation.navigate('DetallePlato', { plato: item})} 
             >
               <Text style={styles.detailsButtonText}>Detalle</Text>
             </TouchableOpacity>

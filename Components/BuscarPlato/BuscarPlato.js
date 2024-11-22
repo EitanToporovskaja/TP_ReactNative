@@ -4,22 +4,12 @@ import api from '../../api';
 import { useMenu } from '../../MenuContext';
 
 export default function BuscarPlato({ navigation }) {
-  const { setMenu, menu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
+  const { menu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
   const [search, setSearch] = useState('');
   const [resultados, setResultados] = useState([]);
-  const [detalle,setDetalle] = useState([]);
+ // const [detalle,setDetalle] = useState([]);
 
-  const cargarDetalle = async (item) => {
-    try {
-      const resultado = await obtenerDetalle(item);
-      if (resultado) {
-        setDetalle(resultado);
-        agregarOEliminarPlato(resultado);
-      }
-    } catch (error) {
-      console.error("Error al obtener el detalle del plato:", error);
-    }
-  };
+
 
   const buscarPlatos = async () => {
     if (search.length > 2) {
@@ -55,14 +45,21 @@ export default function BuscarPlato({ navigation }) {
               onPress={() => navigation.navigate('DetallePlato', { plato: item })}>
               <Text style={styles.buttonText}>Ver Detalles</Text>
               </TouchableOpacity>
-         {   <TouchableOpacity
-        style={styles.button}
-        onPress={() => cargarDetalle(item) }
-      >
-        <Text style={styles.buttonText}>
-          {menu.some(p => p.id === item.id) ? "Eliminar del menú" : "Agregar al menú"}
-        </Text>
-      </TouchableOpacity>}
+         {  <TouchableOpacity 
+  style={styles.button} 
+  onPress={async () => {
+    try {
+      const resultado = await obtenerDetalle(item);
+      agregarOEliminarPlato(resultado); 
+    } catch (error) {
+      console.error("Error al obtener el detalle del plato:", error);
+    }
+  }}
+>
+  <Text style={styles.buttonText}>
+    {menu.some(p => p.id === item.id) ? "Eliminar del menú" : "Agregar al menú"}
+  </Text>
+</TouchableOpacity>}
             
           </View>
         )}

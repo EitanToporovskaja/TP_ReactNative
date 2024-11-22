@@ -4,7 +4,7 @@ import { useMenu } from '../../MenuContext';
 
 export default function DetallePlato({ route, navigation }) {
   const { plato } = route.params;
-  const { menu, setMenu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
+  const { menu, agregarOEliminarPlato, obtenerDetalle } = useMenu();
   const [detalle, setDetalle] = useState([]);
 
   useEffect(() => {
@@ -24,9 +24,6 @@ export default function DetallePlato({ route, navigation }) {
     return <Text style={styles.loadingText}>Cargando detalles del plato...</Text>;
   }
 
-  const GestionarPlato = async () => {
-    agregarOEliminarPlato(detalle, plato);
-  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +36,13 @@ export default function DetallePlato({ route, navigation }) {
         <Text style={styles.resumen}>Resumen: {detalle.summary?.replace(/<[^>]*>/g, '') || 'Sin descripción'}</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => GestionarPlato()}
+          onPress={async () => {
+            try {
+              agregarOEliminarPlato(detalle); 
+            } catch (error) {
+              console.error("Error agregando o eliminando el plato:", error);
+            }
+          }}
         >
           <Text style={styles.buttonText}>
             {menu.some(p => p.id === plato.id) ? "Eliminar del menú" : "Agregar al menú"}
